@@ -9,19 +9,34 @@ class PyGameApp:
         pygame.display.set_caption(name)
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
-        self.actions = []
+        self.fps = fps
+        self.fps_delta = fps/1000.0
+
+        self.background = self._create_black_background(width, height)
+
+    def _create_black_background(self, width, height):
+        background = pygame.Surface((width, height))
+        background.fill(pygame.Color('#000000'))
+
+        return background
+
+    def _process_events(self, event):
+        pass
+
+    def _update(self, *args, **kwargs):
+        pass
+
+    def _draw(self, surface):
+        pass
 
     def main_loop(self):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit(0)
-            for action in self.actions:
-                action(self)
+                self._process_events(event)
+
+            self._update()
+            self._draw(self.screen)
             pygame.display.update()
-            self.clock.tick(60)
-
-
-if __name__ == '__main__':
-    app = PyGameApp()
-    app.main_loop()
+            self.fps_delta = self.clock.tick(self.fps)
