@@ -1,0 +1,15 @@
+{
+    "button": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "5",
+            "border_width": "1",
+            "shadow_width": "2"
+        },
+        "normal_image": {
+            "package": "assets.toolbar",
+            "resource": "folder_open.png",
+            "sub_surface_rect": "0,0,32,32"
+        }
+    }
+}
