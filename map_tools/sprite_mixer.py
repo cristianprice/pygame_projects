@@ -24,8 +24,7 @@ def parse_arguments():
 class SpriteMixer(PyGameApp):
     def __init__(self, args) -> None:
         super().__init__(name=APP_NAME, fps=args.fps, width=args.width, height=args.height)
-        self.manager = pygame_gui.UIManager(
-            (args.width, args.height), 'assets/themes/sprite_mixer_app_theme.json')
+        self.manager = pygame_gui.UIManager((args.width, args.height),'assets/themes/sprite_mixer_app_theme.json')
         self._create_gui()
 
     def _create_gui(self):
@@ -35,24 +34,19 @@ class SpriteMixer(PyGameApp):
                                                         manager=self.manager)
 
     def _process_events(self, event):
-        if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == self.open_button:
-            self._handle_open_file(event)
-        elif event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED and event.ui_element == self.open_file_dialog:
-            image_path = create_resource_path(event.text)
-            print('Picked :', image_path)
-        elif (event.type == pygame_gui.UI_WINDOW_CLOSE
-              and event.ui_element == self.open_file_dialog):
-            self.open_button.enable()
-            self.open_file_dialog = None
-        elif event.type == pygame_gui.UI_SELECTION_LIST_DOUBLE_CLICKED_SELECTION:
-            print('Double click: ', event.ui_element)
-
+        self._handle_open_file(event)
         self.manager.process_events(event)
 
     def _handle_open_file(self, event):
-        if event.ui_element == self.open_button:
+        if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element == self.open_button:
             self.open_file_dialog = create_open_file_dialog(self.manager)
             self.open_button.disable()
+        elif event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED and event.ui_element == self.open_file_dialog:
+            image_path = create_resource_path(event.text)
+            print('Picked :', image_path)
+        elif (event.type == pygame_gui.UI_WINDOW_CLOSE and event.ui_element == self.open_file_dialog):
+            self.open_button.enable()
+            self.open_file_dialog = None
 
     def _update(self, *args, **kwargs):
         self.manager.update(self.fps_delta)

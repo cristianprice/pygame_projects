@@ -31,6 +31,7 @@ class PyGameApp:
 
     def main_loop(self):
         while True:
+            self.fps_delta = self.clock.tick(self.fps)/1000.0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit(0)
@@ -39,4 +40,3 @@ class PyGameApp:
             self._update()
             self._draw(self.screen)
             pygame.display.update()
-            self.fps_delta = self.clock.tick(self.fps)
