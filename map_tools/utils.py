@@ -7,7 +7,8 @@ class PyGameApp:
     def __init__(self, name="PyGameApp", fps=60, width=960, height=600) -> None:
         pygame.init()
         pygame.display.set_caption(name)
-        self.screen = pygame.display.set_mode((width, height))
+        self.screen = pygame.display.set_mode(
+            (width, height), flags=pygame.RESIZABLE)
         self.clock = pygame.time.Clock()
         self.fps = fps
         self.fps_delta = fps/1000.0

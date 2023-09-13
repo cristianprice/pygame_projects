@@ -1,15 +1,17 @@
 {
-    "button": {
+    "#open_btn": {
         "misc": {
             "shape": "rounded_rectangle",
             "shape_corner_radius": "2",
             "border_width": "1",
             "shadow_width": "2"
         },
-        "normal_image": {
-            "package": "assets.toolbar",
-            "resource": "folder_open.png",
-            "sub_surface_rect": "0,0,32,32"
+        "images": {
+            "normal_image": {
+                "package": "assets.toolbar",
+                "resource": "folder_open.png",
+                "sub_surface_rect": "0,0,16,16"
+            }
         }
     }
 }

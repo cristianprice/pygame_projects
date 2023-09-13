@@ -24,14 +24,33 @@ def parse_arguments():
 class SpriteMixer(PyGameApp):
     def __init__(self, args) -> None:
         super().__init__(name=APP_NAME, fps=args.fps, width=args.width, height=args.height)
-        self.manager = pygame_gui.UIManager((args.width, args.height),'assets/themes/sprite_mixer_app_theme.json')
+        self.manager = pygame_gui.UIManager(
+            (args.width, args.height), 'assets/themes/sprite_mixer_app_theme.json')
+
+        # self.manager.set_visual_debug_mode(True)
         self._create_gui()
 
     def _create_gui(self):
-        self.open_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1, 1), (70, 30)),
-                                                        text='Open',
-                                                        tool_tip_text='Opens an image',
-                                                        manager=self.manager)
+
+        self.open_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1, 1), (40, 30)),
+                                                        text='',
+                                                        tool_tip_text='Open an image.',
+                                                        manager=self.manager,
+                                                        object_id='#open_btn')
+
+        self.main_image = self.create_main_image()
+
+    def create_main_image(self, img=None):
+        if img == None:
+            img = pygame.Surface((800, 600))
+
+        return pygame_gui.elements.UIImage(relative_rect=pygame.Rect((1, 35), img.get_size()),
+                                           image_surface=img,
+                                           manager=self.manager,
+                                           anchors={'left': 'left',
+                                                    'right': 'right',
+                                                    'top': 'top',
+                                                    'bottom': 'bottom'})
 
     def _process_events(self, event):
         self._handle_open_file(event)
@@ -42,8 +61,18 @@ class SpriteMixer(PyGameApp):
             self.open_file_dialog = create_open_file_dialog(self.manager)
             self.open_button.disable()
         elif event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED and event.ui_element == self.open_file_dialog:
-            image_path = create_resource_path(event.text)
-            print('Picked :', image_path)
+            try:
+                img = pygame.image.load(create_resource_path(event.text))
+
+                if img.get_size() > self.main_image.image.get_size():
+                    rc = self.main_image.get_relative_rect()
+                    img = pygame.transform.smoothscale(
+                        img, (rc.width, rc.height))
+                self.main_image = self.create_main_image(img)
+
+            except pygame.error as e:
+                print(e)
+
         elif (event.type == pygame_gui.UI_WINDOW_CLOSE and event.ui_element == self.open_file_dialog):
             self.open_button.enable()
             self.open_file_dialog = None
