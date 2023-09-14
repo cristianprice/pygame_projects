@@ -24,29 +24,53 @@ def parse_arguments():
 class SpriteMixer(PyGameApp):
     def __init__(self, args) -> None:
         super().__init__(name=APP_NAME, fps=args.fps, width=args.width, height=args.height)
-        self.manager = pygame_gui.UIManager(
-            (args.width, args.height), 'assets/themes/sprite_mixer_app_theme.json')
-
-        # self.manager.set_visual_debug_mode(True)
+        theme = 'assets/themes/sprite_mixer_app_theme.json'
+        self.manager = pygame_gui.UIManager((args.width, args.height), theme)
+        self.sprite_types = ['Symmetric Size',
+                             'Similar Size', 'Different Size']
         self._create_gui()
 
     def _create_gui(self):
-
+        window_rect = self.screen.get_rect()
+        self.up_panel = pygame_gui.elements.UIPanel(pygame.Rect(0, 0, window_rect.width * 2 / 3, 40),
+                                                    manager=self.manager, object_id="#panel_red")
+        self.right_panel = pygame_gui.elements.UIPanel(pygame.Rect(window_rect.width * 2 / 3, 0, window_rect.width / 3, window_rect.height),
+                                                       manager=self.manager, object_id="#panel_green")
+        self.working_rect = pygame.Rect(
+            0, 40, window_rect.width * 2 / 3,  window_rect.height - 40)
+        self.left_down_panel = pygame_gui.elements.UIPanel(self.working_rect,
+                                                           manager=self.manager, object_id="#panel_blue")
         self.open_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1, 1), (40, 30)),
                                                         text='',
                                                         tool_tip_text='Open an image.',
                                                         manager=self.manager,
+                                                        container=self.up_panel,
                                                         object_id='#open_btn')
+        self.save_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((41, 1), (40, 30)),
+                                                        text='',
+                                                        tool_tip_text='Saves the sprites.',
+                                                        manager=self.manager,
+                                                        container=self.up_panel,
+                                                        object_id='#save_btn')
 
-        self.main_image = self.create_main_image()
+        self.sprite_types_dd_menu = pygame_gui.elements.UIDropDownMenu(self.sprite_types,
+                                                                       self.sprite_types[0],
+                                                                       pygame.Rect(
+                                                                           10, 1, 200, 30),
+                                                                       self.manager,
+                                                                       container=self.right_panel)
 
-    def create_main_image(self, img=None):
+        self.main_image = self._create_main_image()
+
+    def _create_main_image(self, img=None):
         if img == None:
-            img = pygame.Surface((800, 600))
+            img = pygame.Surface(
+                (self.working_rect.width, self.working_rect .height))
 
-        return pygame_gui.elements.UIImage(relative_rect=pygame.Rect((1, 35), img.get_size()),
+        return pygame_gui.elements.UIImage(relative_rect=pygame.Rect((1, 1), img.get_size()),
                                            image_surface=img,
                                            manager=self.manager,
+                                           container=self.left_down_panel,
                                            anchors={'left': 'left',
                                                     'right': 'right',
                                                     'top': 'top',
@@ -68,7 +92,7 @@ class SpriteMixer(PyGameApp):
                     rc = self.main_image.get_relative_rect()
                     img = pygame.transform.smoothscale(
                         img, (rc.width, rc.height))
-                self.main_image = self.create_main_image(img)
+                self.main_image = self._create_main_image(img)
 
             except pygame.error as e:
                 print(e)

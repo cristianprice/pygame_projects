@@ -13,5 +13,54 @@
                 "sub_surface_rect": "0,0,16,16"
             }
         }
+    },
+    "#save_btn": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "2",
+            "border_width": "1",
+            "shadow_width": "2"
+        },
+        "images": {
+            "normal_image": {
+                "package": "assets.toolbar",
+                "resource": "save.png",
+                "sub_surface_rect": "0,0,16,16"
+            }
+        }
+    },
+    "#panel_red": {
+        "colours": {
+            "normal_border": "#F1948A"
+        }
+    },
+    "#panel_green": {
+        "colours": {
+            "normal_border": "#28B463"
+        }
+    },
+    "#panel_blue": {
+        "colours": {
+            "normal_border": "#3498DB"
+        }
+    },
+    "drop_down_menu": {
+        "misc": {
+            "expand_direction": "down",
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "2",
+            "border_width": "1",
+            "shadow_width": "2"
+        },
+        "colours": {
+            "normal_bg": "#25292e",
+            "hovered_bg": "#35393e"
+        }
+    },
+    "drop_down_menu.#selected_option": {
+        "misc": {
+            "border_width": "1",
+            "open_button_width": "10"
+        }
     }
 }
